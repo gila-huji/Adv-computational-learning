@@ -31,12 +31,9 @@ def clean(df):
                 'fw_soft_clipped_start', 'fw_soft_clipped_end', 'read_length', 'base_qual']).agg({'mod_qual': 'max'}).reset_index()
 
     # merge with CpG sites
-    df['ref_position_adj'] = np.where(df['ref_mod_strand'] == '+', df['ref_position'] + 1,
-                                          df['ref_position'])
-    df = df.merge(cpg, left_on='ref_position_adj', right_on='ref_pos', how='left')
-
     df['ref_position_adj'] = np.where(df['ref_mod_strand'] == '+', df['ref_position'] + 1, df['ref_position'])
-    df = df.merge(cpg, left_on='ref_position_adj', right_on='ref_pos', how='left').drop(['chr', 'ref_pos'], axis=1)
+    df = df.merge(cpg, left_on='ref_position_adj', right_on='ref_pos', how='left')
+    df.drop(columns=['chr', 'ref_pos'], inplace=True)
 
     return(df)
 
